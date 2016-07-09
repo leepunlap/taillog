@@ -1,0 +1,115 @@
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+  		var socket = io();
+  		socket.on('alert',function(data) {
+  			document.getElementById("progress").innerHTML = '<font color="red">'+data+'</font>';
+  		})
+  		socket.on('progress',function(data) {
+  			document.getElementById("progress").innerHTML = data;
+
+  			if (data === "activated") {
+  				setTimeout (function() {
+  					document.location = 'http://promo.galaxymacau.com/wifi/';
+  				},3000)
+  			}
+  		})
+
+		function get(name){
+		   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+		      return decodeURIComponent(name[1]);
+		}
+
+		function doActivate() {
+			document.getElementById("progress").innerHTML = 'Requesting';
+			setTimeout(function() {
+				socket.emit("data", {
+					action: 'activate',
+					email: document.getElementById("email").value,
+					activation_code: document.getElementById("actcode").value
+				});
+			},200);
+		}
+	</script>
+	<style>
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  cursor: not-allowed;
+  background-color: #fff;
+  opacity: 0.3;
+  color:gray;
+}
+	</style>
+</head>
+<body>
+		<div id="main-nav" class="navbar navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+				<center>
+					<a class="navbar-brandX scrolltoX" href=""><img src="galaxy.jpg" width="160px"></a>
+				</center>
+				</div>
+			</div>
+		</div>
+		<div id="main-content">
+			<div class="scroll-down">
+				<a href="#services" class="scrollto">Learn More</a>
+			</div>
+
+			<section id="services" class="big-padding">
+				<div style="text-align:left;">
+					<br>
+					<br>
+					<br>
+					<h1 class="section-title">Activate 激活 VIP</h1>
+
+					  <div class="form-group" style="display:none">
+					    <label for="inputEmail3" class="col-sm-3 control-label">Email 电邮</label>
+					    <div class="col-sm-9">
+					      <input type="email" readonly class="form-control" id="email" placeholder="Email">
+					    </div>
+					  </div>
+					  <div class="form-group" style="display:none">
+					    <label for="inputPassword3" class="col-sm-3 control-label" style="white-space: nowrap;">Activation Code 激活码</label>
+					    <div class="col-sm-9">
+					      <input type="text" readonly class="form-control" id="actcode" placeholder="Activation Code">
+					    </div>
+					  </div>
+					  <br>
+					  <br>
+					  <div class="form-group" >
+					    <div class="col-sm-offset-3 col-sm-7">
+					      <button onclick="doActivate()" href="javascript:void();" class="btn btn-default" style="display:none">Activate 激活</button>
+						  <center>
+						  <span id="progress"></span>
+						  </center>
+						  <br>
+						  <br>
+						  <!--a href="signup.html">Reqest an Activation Code</a-->
+					    </div>
+					  </div>
+
+
+					
+				</div>
+			
+			
+			</section>
+</div>
+<script>
+		if (get('email')) {
+			document.getElementById("email").value = get('email');
+		}
+		if (get('activationcode')) {
+			document.getElementById("actcode").value = get('activationcode');
+		}
+		setTimeout(function() {
+			doActivate();
+		},500);
+</script>
+</body>
+</html>

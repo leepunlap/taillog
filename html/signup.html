@@ -1,0 +1,97 @@
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+  		var socket = io();
+
+  		socket.on('alert',function(data) {
+  			document.getElementById("progress").innerHTML = '<font color="red">'+data+'</font>';
+  		})
+  		socket.on('progress',function(data) {
+  			document.getElementById("progress").innerHTML = data;
+  		})
+
+		function get(name){
+		   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+		      return decodeURIComponent(name[1]);
+		}
+
+		function doSignup() {
+			document.getElementById("progress").innerHTML = 'Requesting';
+			setTimeout(function() {
+				socket.emit("data", {
+					action: 'register',
+					email: document.getElementById("email").value,
+					mac: document.getElementById("mac").value
+				});
+			},200);
+		}
+
+	</script>
+</head>
+<body>
+		<div id="main-nav" class="navbar navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+				<center>
+					<a class="navbar-brandX scrolltoX" href=""><img src="galaxy.jpg" width="160px"></a>
+				</center>
+				</div>
+			</div>
+		</div>
+		<div id="main-content">
+			<div class="scroll-down">
+				<a href="#services" class="scrollto">Learn More</a>
+			</div>
+
+			<section id="services" class="big-padding">
+				<div class="container-f">
+					<h1 class="section-title">Request VIP Access</h1>
+
+					  <div class="form-group">
+					    <label class="col-sm-3 control-label">Email</label>
+					    <div class="col-sm-9">
+					      <input type="email" class="form-control" id="email" placeholder="Email">
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label class="col-sm-3 control-label">MAC Address</label>
+					    <div class="col-sm-9">
+					      <input type="text" class="form-control" id="mac" placeholder="Mac Address">
+					    </div>
+					  </div>
+					  <br>
+					  <div class="form-group">
+					    <div class="col-sm-offset-3 col-sm-9">
+					      <button onclick="doSignup()" href="javascript:void()" class="btn btn-default">Send me an activation Code</button>
+						  <br>
+						  <br>
+						  <span id="progress"></span>
+						  <br>
+						  <br>
+						  <a href="index.html">I have an Activation Code</a>
+					    </div>
+					  </div>
+
+					
+				</div>
+			
+			
+			</section>
+</div>
+<script>
+		if (get('email')) {
+			document.getElementById("email").value = get('email');
+		}
+		if (get('mac')) {
+			document.getElementById("mac").value = get('mac');
+		} else {
+			document.getElementById("mac").value = '00:00:00:00:00:00';
+		}
+</script>
+</body>
+</html>
